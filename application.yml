@@ -1,0 +1,27 @@
+# java -jar ksqldb-std-artifact-generator-1.0.1.jar --spring.config.location=anotherApplication.yml
+connect:
+  #connectionUrl: jdbc:sqlserver://SSUAVE1043.AD.CH.PBK:1112;databaseName=SG_SGS
+  connectionUrl: jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++
+  databaseAndSchema: SG_SGS_CPT.cpt
+#  connectionUser: ADMLOAD
+#  connectionPassword: jdEa#b.Xm(7l
+  connectionUser: ct332
+  connectionPassword: Welcome2021++
+model:
+  registryUrl: http://localhost:8081/schemas
+  ksqlUrl: http://localhost:8088
+  dropRawStreams: true
+  createRawStreams: true
+  dropStdStreams: true
+  createStdStreams: true
+  dropHistStreams: true
+  createHistStreams: true
+  dropConnectors: true
+  createConnectors: true
+  dropHistoryConnectors: true
+  createHistoryConnectors: true
+  isSimulation: false
+  #topics: ^(COM|CAI)\.(I|V).*$  #regexp filter,  ^.*$ if you don't want any filter'
+  topics: ^(COM|CAI|SGS)\..*$   #regexp filter,  ^.*$ if you don't want any filter'
+  createKsqlTableFromStdStreamFor: ^(COM|CAI|SGS)\.T511.*$  #reference tables like TGEN ones
+  dontGenerateHistoryFor: ^(COM|CAI|SGS)\.TGEN.*$  #some S2i tables are already historized and some don't need historization at all
