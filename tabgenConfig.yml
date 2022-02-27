@@ -1,0 +1,507 @@
+generator:
+  busTables: 
+    - "038":
+        tableName: TGEN_038_TYP_TAUX
+        key: CD_TYP_TAUX
+        columnNames:
+          - GTB_CDE AS CD_TYP_TAUX
+          - GTB_DES AS LIB_TYP_TAUX
+          - GTB_SRT_DES AS LIB_SRT_TYP_TAUX
+    - "063":
+        tableName: TGEN_063_GER
+        key: CD_GER
+        columnNames:
+          - GTB_CDE AS CD_GER
+          - GTB_DES AS LIB_GER
+          - GTB_SRT_DES AS LIB_SRT_GER
+    - "080":
+        tableName: TGEN_080_DEVISE_LOCALE_02
+        key: DEVISE_LOCALE
+        columnNames:
+          - GTB_CDE AS DEVISE_LOCALE
+          - GTB_DES AS LIB_DEVISE_LOCALE_02
+          - GTB_SRT_DES AS LIB_SRT_EVISE_LOCALE_02
+    - "101":
+        tableName: TGEN_101_BLO
+        key: CD_BLO
+        columnNames:
+          - GTB_CDE AS CD_BLO
+          - GTB_DES AS LIB_BLO
+          - GTB_SRT_DES AS LIB_SRT_BLO
+    - "102":
+        tableName: TGEN_102_CARTE_STE
+        key: CD_CARTE_STE
+        columnNames:
+          - GTB_CDE AS CD_CARTE_STE
+          - GTB_DES AS LIB_CARTE_STE
+          - GTB_SRT_DES AS LIB_SRT_CARTE_STE
+    - "103":
+        tableName: TGEN_103_ETAT
+        key: CD_ETAT
+        columnNames:
+          - GTB_CDE AS CD_ETAT
+          - GTB_DES AS LIB_ETAT
+          - GTB_SRT_DES AS LIB_SRT_ETAT
+    - "106":
+        tableName: TGEN_106_PROFIL_ACCES
+        key: CD_PROFIL_ACCES
+        columnNames:
+          - GTB_CDE AS CD_PROFIL_ACCES
+          - GTB_DES AS LIB_PROFIL_ACCES
+          - GTB_SRT_DES AS LIB_SRT_PROFIL_ACCES
+    - "115":
+        tableName: TGEN_115_ETAT
+        key: CD_ETAT
+        columnNames:
+          - GTB_CDE AS CD_ETAT
+          - GTB_DES AS LIB_ETAT
+          - GTB_SRT_DES AS LIB_SRT_ETAT
+          - SUBSTRING(GTB_CDE_1, 1, 4) AS CD_ALPHA_STATUS
+    - "121":
+        tableName: TGEN_121_LIEU_COF
+        key: CD_LIEU_COF
+        columnNames:
+          - GTB_CDE AS CD_LIEU_COF
+          - GTB_DES AS LIB_LIEU_COF
+          - GTB_SRT_DES AS LIB_SRT_LIEU_COF
+    - "122":
+        tableName: TGEN_122_ETAT_COF
+        key: CD_ETAT_COF
+        columnNames:
+          - GTB_CDE AS CD_ETAT_COF
+          - GTB_DES AS LIB_ETAT_COF
+          - GTB_SRT_DES AS LIB_SRT_ETAT_COF
+    - "123":
+        tableName: TGEN_123_TYP_COF
+        key: CD_TYP_COF
+        columnNames:
+          - GTB_CDE AS CD_TYP_COF
+          - GTB_DES AS LIB_TYP_COF
+          - GTB_SRT_DES AS LIB_SRT_TYP_COF
+    - "124":
+        tableName: TGEN_124_DEPOT_CLEF
+        key: CD_DEPOT_CLEF
+        columnNames:
+          - GTB_CDE AS CD_DEPOT_CLEF
+          - GTB_DES AS LIB_DEPOT_CLEF
+          - GTB_SRT_DES AS LIB_SRT_DEPOT_CLEF
+    - "144":
+        tableName: TGEN_144_ZONE_GEO
+        key: CD_ZONE_GEO
+        columnNames:
+          - GTB_CDE AS CD_ZONE_GEO
+          - GTB_DES AS LIB_ZONE_GEO
+          - GTB_SRT_DES AS LIB_SRT_ZONE_GEO
+          - GTB_CDE_2 AS CD_MET
+          - GTB_CDE_3 AS CD_RESP_ZONE
+    - "145":
+        tableName: TGEN_145_ID_UB
+        key: CD_ID_UB
+        columnNames:
+          - GTB_CDE AS CD_ID_UB
+          - GTB_DES AS LIB_ID_UB
+          - GTB_SRT_DES AS LIB_SRT_ID_UB
+          - GTB_CDE_1 AS CD_SIEGE_UB
+          - GTB_CDE_2 AS CD_METIER_UB
+          - GTB_CDE_3 AS CD_ZONE_UB
+    - "146":
+        tableName: TGEN_146_DEPT
+        key: CD_DEPT
+        columnNames:
+          - GTB_CDE AS CD_DEPT
+          - GTB_DES AS LIB_DEPT
+          - GTB_SRT_DES AS LIB_SRT_DEPT
+          - GTB_CDE_1 AS CD_BI_RESP_DEPT
+          - SUBSTRING(GTB_CDE_2,1,2) AS CD_PER_CT
+          - SUBSTRING(GTB_CDE_3,1,1) AS CD_SIEGE
+          - SUBSTRING(GTB_CDE_4,1,4) AS CD_ZONE_GEO
+    - "147":
+        tableName: TGEN_147_SSG
+        key: CD_SSG
+        columnNames:
+          - GTB_CDE AS CD_SSG
+          - GTB_DES AS LIB_SSG
+          - GTB_SRT_DES AS LIB_SRT_SSG
+          - GTB_CDE_1 AS CD_DEPT
+          - GTB_CDE_2 AS CD_MET
+          - GTB_CDE_3 AS CD_RESP_SSG
+    - "151":
+        tableName: TGEN_151_SIEGE
+        key: CD_SIEGE
+        columnNames:
+          - GTB_CDE AS CD_SIEGE
+          - GTB_DES AS LIB_SIEGE
+          - GTB_SRT_DES AS LIB_SRT_SIEGE
+          - GTB_FLG_1 AS ID_SIEGE_CLI
+    - "151":
+        tableName: TGEN_151_SIEGE_CI_CORR
+        key: CD_SIEGE_CI_CORR
+        columnNames:
+          - GTB_CDE AS CD_SIEGE_CI_CORR
+          - GTB_DES AS LIB_SIEGE_CI_CORR
+          - GTB_SRT_DES AS LIB_SRT_SIEGE_CI_CORR
+    - "152":
+        tableName: TGEN_152_TYP_INTV
+        key: CD_TYP_INTV
+        columnNames:
+          - GTB_CDE AS CD_TYP_INTV
+          - GTB_DES AS LIB_TYP_INTV
+          - GTB_SRT_DES AS LIB_SRT_TYP_INTV
+    - "153":
+        tableName: TGEN_153_TYP_GES_CLI
+        key: CD_TYP_GES_CLI
+        columnNames:
+          - GTB_CDE AS CD_TYP_GES_CLI
+          - GTB_DES AS LIB_TYP_GES_CLI
+          - GTB_SRT_DES AS LIB_SRT_TYP_GES_CLI
+    - "15X":
+        tableName: TGEN_15X_AGNC
+        key: CD_AGNC
+        columnNames:
+          - GTB_CDE AS CD_AGNC
+          - GTB_DES AS LIB_AGNC
+          - GTB_SRT_DES AS LIB_SRT_AGNC
+    - "161":
+        tableName: TGEN_161_SECT_ECO_BDF
+        key: CD_SECT_ECO_BDF
+        columnNames:
+          - GTB_CDE AS CD_SECT_ECO_BDF
+          - GTB_DES AS LIB_SECT_ECO_BDF
+          - GTB_SRT_DES AS LIB_SRT_SECT_ECO_BDF
+    - "16P":
+        tableName: TGEN_16P_PROF_GES_CLI
+        key: CD_PROF_GES_CLI
+        columnNames:
+          - GTB_CDE AS CD_PROF_GES_CLI
+          - GTB_DES AS LIB_PROF_GES_CLI
+          - GTB_SRT_DES AS LIB_SRT_PROF_GES_CLI
+    - "16S":
+        tableName: TGEN_16S_SS_PROF_GES_CLI
+        key: CD_SS_PROF_GES_CLI
+        columnNames:
+          - GTB_CDE AS CD_SS_PROF_GES_CLI
+          - GTB_DES AS LIB_SS_PROF_GES_CLI
+          - GTB_SRT_DES AS LIB_SRT_SS_PROF_GES_CLI
+    - "171":
+        tableName: TGEN_171_BRM_COMM
+        key: CD_BRM_COMM
+        columnNames:
+          - GTB_CDE AS CD_BRM_COMM
+          - GTB_DES AS LIB_BRM_COMM
+          - GTB_SRT_DES AS LIB_SRT_BRM_COMM
+    - "181":
+        tableName: TGEN_181_PER_ELAB_RLV
+        key: CD_PER_ELAB_RLV
+        columnNames:
+          - GTB_CDE AS CD_PER_ELAB_RLV
+          - GTB_DES AS LIB_PER_ELAB_RLV
+          - GTB_SRT_DES AS LIB_SRT_PER_ELAB_RLV
+    - "1AJ":
+        tableName: TGEN_1AJ_TYP_REL
+        key: CD_TYP_REL
+        columnNames:
+          - GTB_CDE AS CD_TYP_REL
+          - GTB_DES AS LIB_TYP_REL
+          - GTB_SRT_DES AS LIB_SRT_TYP_REL
+    - "1C1":
+        tableName: TGEN_1C1_ETAT_FLUX
+        key: CD_ETAT_FLUX
+        columnNames:
+          - GTB_CDE AS CD_ETAT_FLUX
+          - GTB_DES AS LIB_ETAT_FLUX
+          - GTB_SRT_DES AS LIB_SRT_ETAT_FLUX
+    - "1C2":
+        tableName: TGEN_1C2_MTF_TFT_VALD
+        key: CD_MTF_TFT_VALD
+        columnNames:
+          - GTB_CDE AS CD_MTF_TFT_VALD
+          - GTB_DES AS LIB_MTF_TFT_VALD
+          - GTB_SRT_DES AS LIB_SRT_MTF_TFT_VALD
+    - "1GD":
+        tableName: TGEN_1GD_DON_FIN
+        key: CD_DON_FIN
+        columnNames:
+          - GTB_CDE AS CD_DON_FIN
+          - GTB_DES AS LIB_DON_FIN
+          - GTB_SRT_DES AS LIB_SRT_DON_FIN
+    - "345":
+        tableName: TGEN_345_PERIODE_MIS
+        key: CD_PER_MIS
+        columnNames:
+          - GTB_CDE AS CD_PER_MIS
+          - GTB_DES AS LIB_PER_MIS
+          - GTB_SRT_DES AS LIB_SRT_PER_MIS
+          - SUBSTRING(GTB_CDE_1,1,3) AS CD_ABR
+          - SUBSTRING(GTB_CDE_2,1,2) AS PER_CT
+          - PARSE_DATE(GTB_CDE_3, 'yyyyMMdd') AS DT_FIN_PER
+          - SUBSTRING(GTB_CDE_4,1,1) AS CD_INTERO_IMMI
+          - PARSE_DATE(GTB_CDE_5, 'yyyyMMdd') AS DT_DEB_PER
+    - "350":
+        tableName: TGEN_350_TYP_UB
+        key: CD_TYP_UB
+        columnNames:
+          - GTB_CDE AS CD_TYP_UB
+          - GTB_DES AS LIB_TYP_UB
+          - GTB_SRT_DES AS LIB_SRT_TYP_UB
+    - "351":
+        tableName: TGEN_351_TYP_RUB
+        key: CD_TYP_RUB
+        columnNames:
+          - GTB_CDE AS CD_TYP_RUB
+          - GTB_DES AS LIB_TYP_RUB
+          - GTB_SRT_DES AS LIB_SRT_TYP_RUB
+    - "352":
+        tableName: TGEN_352_PER_BUDG
+        key: CD_PER_BUDG
+        columnNames:
+          - GTB_CDE AS CD_PER_BUDG
+          - GTB_DES AS LIB_PER_BUDG
+          - GTB_SRT_DES AS LIB_SRT_PER_BUDG
+    - "365":
+        tableName: TGEN_365_TVA
+        key: CD_TVA
+        columnNames:
+          - GTB_CDE AS CD_TVA
+          - GTB_DES AS LIB_TVA
+          - GTB_SRT_DES AS LIB_SRT_TVA
+    - "366":
+        tableName: TGEN_366_PER_RLV_INTERM
+        key: CD_PER_RLV_INTERM
+        columnNames:
+          - GTB_CDE AS CD_PER_RLV_INTERM
+          - GTB_DES AS LIB_PER_RLV_INTERM
+          - GTB_SRT_DES AS LIB_SRT_PER_RLV_INTERM
+    - "374":
+        tableName: TGEN_374_ETAT_BIL
+        key: CD_ETAT_BIL
+        columnNames:
+          - GTB_CDE AS CD_ETAT_BIL
+          - GTB_DES AS LIB_ETAT_BIL
+          - GTB_SRT_DES AS LIB_SRT_ETAT_BIL
+    - "403":
+        tableName: TGEN_403_TYP_SUR
+        key: CD_TYP_SUR
+        columnNames:
+          - GTB_CDE AS CD_TYP_SUR
+          - GTB_DES AS LIB_TYP_SUR
+          - GTB_SRT_DES AS LIB_SRT_TYP_SUR
+    - "404":
+        tableName: TGEN_404_TYP_TRT_RISQ
+        key: CD_TYP_TRT_RISQ
+        columnNames:
+          - GTB_CDE AS CD_TYP_TRT_RISQ
+          - GTB_DES AS LIB_TYP_TRT_RISQ
+          - GTB_SRT_DES AS LIB_SRT_TYP_TRT_RISQ
+    - "42J":
+        tableName: TGEN_42J_MD_REEV
+        key: CD_MD_REEV
+        columnNames:
+          - GTB_CDE AS CD_MD_REEV
+          - GTB_DES AS LIB_MD_REEV
+          - GTB_SRT_DES AS LIB_SRT_MD_REEV
+    - "42K":
+        tableName: TGEN_42K_TYP_LIM
+        key: CD_TYP_LIM
+        columnNames:
+          - GTB_CDE AS CD_TYP_LIM
+          - GTB_DES AS LIB_TYP_LIM
+          - GTB_SRT_DES AS LIB_SRT_TYP_LIM
+    - "42L":
+        tableName: TGEN_42L_MD_REEV
+        key: CD_MD_REEV
+        columnNames:
+          - GTB_CDE AS CD_MD_REEV
+          - GTB_DES AS LIB_MD_REEV
+          - GTB_SRT_DES AS LIB_SRT_MD_REEV
+    - "433":
+        tableName: TGEN_433_TYP_RISQ
+        key: CD_TYP_RISQ
+        columnNames:
+          - GTB_CDE AS CD_TYP_RISQ
+          - GTB_DES AS LIB_TYP_RISQ
+          - GTB_SRT_DES AS LIB_SRT_TYP_RISQ
+    - "487":
+        tableName: TGEN_487_TYP_CARTE
+        key: CD_TYP_CARTE
+        columnNames:
+          - GTB_CDE AS CD_TYP_CARTE
+          - GTB_DES AS LIB_TYP_CARTE
+          - GTB_SRT_DES AS LIB_SRT_TYP_CARTE
+    - "488":
+        tableName: TGEN_488_ETAT
+        key: CD_ETAT
+        columnNames:
+          - GTB_CDE AS CD_ETAT
+          - GTB_DES AS LIB_ETAT
+          - GTB_SRT_DES AS LIB_SRT_ETAT
+    - "48A":
+        tableName: TGEN_48A_GENR_CARTE
+        key: CD_GENR_CARTE
+        columnNames:
+          - GTB_CDE AS CD_GENR_CARTE
+          - GTB_DES AS LIB_GENR_CARTE
+          - GTB_SRT_DES AS LIB_SRT_GENR_CARTE
+    - "48G":
+        tableName: TGEN_48G_FMT_CRNT
+        key: CD_FMT_CRNT
+        columnNames:
+          - GTB_CDE AS CD_FMT_CRNT
+          - GTB_DES AS LIB_FMT_CRNT
+          - GTB_SRT_DES AS LIB_SRT_FMT_CRNT
+    - "48R":
+        tableName: PLAFOND_48R
+        key: CD_PRODUIT, CD_NIV_SERVICE
+        columnNames:
+          - SUBSTRING(GTB_CDE,1,5) AS CD_PRODUIT
+          - SUBSTRING(GTB_CDE,6,3) AS CD_NIV_SERVICE
+          - SUBSTRING(GTB_CDE,9,22) AS CD_PLAFOND
+          - GTB_DES AS DESCRIPTION
+          - GTB_CDE_1 AS MONTANT_PLAFOND          
+    - "48T":
+        tableName: TGEN_48T_NIV_SERV
+        key: CD_NIV_SERV
+        columnNames:
+          - GTB_CDE AS CD_NIV_SERV
+          - GTB_DES AS LIB_NIV_SERV
+          - GTB_SRT_DES AS LIB_SRT_NIV_SERV
+    - "48X":
+        tableName: TGEN_48X_TYP_LIVRB
+        key: CD_TYP_LIVRB
+        columnNames:
+          - GTB_CDE AS CD_TYP_LIVRB
+          - GTB_DES AS LIB_TYP_LIVRB
+          - GTB_SRT_DES AS LIB_SRT_TYP_LIVRB
+    - "48Y":
+        tableName: TGEN_48Y_ETAT
+        key: CD_ETAT
+        columnNames:
+          - GTB_CDE AS CD_ETAT
+          - GTB_DES AS LIB_ETAT
+          - GTB_SRT_DES AS LIB_SRT_ETAT
+    - "49C":
+        tableName: TGEN_49C_MTF_CDE
+        key: CD_MTF_CDE
+        columnNames:
+          - GTB_CDE AS CD_MTF_CDE
+          - GTB_DES AS LIB_MTF_CDE
+          - GTB_SRT_DES AS LIB_SRT_MTF_CDE
+    - "4D3":
+        tableName: TGEN_4D3_LGN_PRD
+        key: CD_LGN_PRD
+        columnNames:
+          - GTB_CDE AS CD_LGN_PRD
+          - GTB_DES AS LIB_LGN_PRD
+          - GTB_SRT_DES AS LIB_SRT_LGN_PRD
+    - "603":
+        tableName: TGEN_603_TYP_CONSO
+        key: CD_TYP_CONSO
+        columnNames:
+          - GTB_CDE AS CD_TYP_CONSO
+          - GTB_DES AS LIB_TYP_CONSO
+          - GTB_SRT_DES AS LIB_SRT_TYP_CONSO
+          - GTB_FLG_2 AS ID_CONSO_TYPE_GES
+          - GTB_CDE_1 AS CD_NIV_AUTOR
+          - GTB_CDE_2 AS GTB_CD_TYPE_INTERR
+          - GTB_CDE_3 AS ID_AUTOR_IMMI
+          - GTB_CDE_4 AS ID_AUTOR_ISMI
+    - "75L":
+        tableName: TGEN_75L_MD_EVAL_NOS
+        key: CD_MD_EVAL_NOS
+        columnNames:
+          - GTB_CDE AS CD_MD_EVAL_NOS
+          - GTB_DES AS LIB_MD_EVAL_NOS
+          - GTB_SRT_DES AS LIB_SRT_MD_EVAL_NOS
+    - "765":
+        tableName: TGEN_765_CPT_TYP
+        key: CD_CPT_TYP
+        columnNames:
+          - GTB_CDE AS CD_CPT_TYP
+          - GTB_DES AS LIB_CPT_TYP
+          - GTB_SRT_DES AS LIB_SRT_CPT_TYP
+          - TRIM(GTB_CDE_4) AS IND_PERS
+    - "90L":
+        tableName: TGEN_90L_NATR_CPTE_INTN
+        key: CD_NATR_CPTE_INTN
+        columnNames:
+          - GTB_CDE AS CD_NATR_CPTE_INTN
+          - GTB_DES AS LIB_NATR_CPTE_INTN
+          - GTB_SRT_DES AS LIB_SRT_NATR_CPTE_INTN
+    - "91A":
+        tableName: TGEN_91A_LIEU
+        key: CD_LIEU
+        columnNames:
+          - GTB_CDE AS CD_LIEU
+          - GTB_DES AS LIB_LIEU
+          - GTB_SRT_DES AS LIB_SRT_LIEU
+    - "921":
+        tableName: TGEN_921_TYP_COMM_TVA
+        key: CD_TYP_COMM_TVA
+        columnNames:
+          - GTB_CDE AS CD_TYP_COMM_TVA
+          - GTB_DES AS LIB_TYP_COMM_TVA
+          - GTB_SRT_DES AS LIB_SRT_TYP_COMM_TVA
+    - "CBA":
+        tableName: TGEN_CBA_RSLT_RECH
+        key: CD_RSLT_RECH
+        columnNames:
+          - GTB_CDE AS CD_RSLT_RECH
+          - GTB_DES AS LIB_RSLT_RECH
+          - GTB_SRT_DES AS LIB_SRT_RSLT_RECH
+    - "CBB":
+        tableName: TGEN_CBB_ST_CLI
+        key: CD_ST_CLI
+        columnNames:
+          - GTB_CDE AS CD_ST_CLI
+          - GTB_DES AS LIB_ST_CLI
+          - GTB_SRT_DES AS LIB_SRT_ST_CLI
+    - "CBC":
+        tableName: TGEN_CBC_METIER
+        key: CD_METIER
+        columnNames:
+          - GTB_CDE AS CD_METIER
+          - GTB_DES AS LIB_METIER
+          - GTB_SRT_DES AS LIB_SRT_METIER
+          - SUBSTRING(GTB_CDE_2, 3, 3) AS CD_RESP_METIER 
+    - "CBE":
+        tableName: TGEN_CBE_TYPE_ENT_REL
+        key: CD_TYPE_ENT_REL
+        columnNames:
+          - GTB_CDE AS CD_TYPE_ENT_REL
+          - GTB_DES AS LIB_TYPE_ENT_REL
+          - GTB_SRT_DES AS LIB_SRT_TYPE_ENT_REL
+    - "CBF":
+        tableName: TGEN_CBF_TYP_MVT_ENT
+        key: CD_TYP_MVT_ENT
+        columnNames:
+          - GTB_CDE AS CD_TYP_MVT_ENT
+          - GTB_DES AS LIB_TYP_MVT_ENT
+          - GTB_SRT_DES AS LIB_SRT_TYP_MVT_ENT
+    - "CBG":
+        tableName: TGEN_CBG_STG_TRADE
+        key: CD_STG_TRADE
+        columnNames:
+          - GTB_CDE AS CD_STG_TRADE
+          - GTB_DES AS LIB_STG_TRADE
+          - GTB_SRT_DES AS LIB_SRT_STG_TRADE
+    - "CBY":
+        tableName: TGEN_CBY_ROLE_STE
+        key: CD_ROLE_STE
+        columnNames:
+          - GTB_CDE AS CD_ROLE_STE
+          - GTB_DES AS LIB_ROLE_STE
+          - GTB_SRT_DES AS LIB_SRT_ROLE_STE
+    - "CBZ":
+        tableName: TGEN_CBZ_ACVT_STE
+        key: CD_CBZ_ACVT_STE
+        columnNames:
+          - GTB_CDE AS CD_CBZ_ACVT_STE
+          - GTB_DES AS LIB_CBZ_ACVT_STE
+          - GTB_SRT_DES AS LIB_SRT_CBZ_ACVT_STE
+    - "IDC":
+        tableName: TGEN_IDC_SECT_ECO_RISQ
+        key: CD_SECT_ECO_RISQ
+        columnNames:
+          - GTB_CDE AS CD_SECT_ECO_RISQ
+          - GTB_DES AS LIB_SECT_ECO_RISQ
+          - GTB_SRT_DES AS LIB_SRT_SECT_ECO_RISQ
+
