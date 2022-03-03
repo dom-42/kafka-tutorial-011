@@ -1,0 +1,49 @@
+generator:
+  busTables:    
+    SGS:     
+      CE:
+        key: DATA->NO_INTV ,DATA->NO_ORD_CPTE ,DATA->CD_MON,
+      ECR_ANAL:
+        columnNames:
+          - CONCAT(CONCAT(DATA->NO_OP, '.'), LPAD(DATA->NO_PH, 3, 0)) AS EVENT_NUMBER
+      ECR_ESP:
+        columnNames:
+          - CONCAT(CONCAT(DATA->NO_OP, '.'), LPAD(DATA->NO_PH, 3, 0)) AS EVENT_NUMBER
+      POS_TIT_CMPL:
+        columnNames:
+          - CONCAT(CONCAT(CONCAT(CONCAT(CONCAT( CONCAT(CONCAT(CONCAT(CONCAT(CONCAT( DATA->NO_INTV, '-'), LPAD(DATA->NO_RUB, 3, 0)), '-'), TRIM(DATA->NO_ISIN)), '.'), LPAD(DATA->INDX_TIT, 3, 0)), '-'), LPAD(DATA->DT_LIQ, 8, 0)), '-'), DATA->NO_DEP) AS SEC_POS_KEY 
+          - CONCAT(CONCAT(TRIM(NO_ISIN), '.'), LPAD(INDX_TIT, 3, 0)) AS NO_ISIN_INDX_TIT 
+      POS_TIT_NOSTRO:
+        tableName: CAI.ECR_ESP
+        key: NO_INTV ,NO_RUB ,NO_ISIN ,INDX_TIT ,DT_LIQ ,NO_DEP,
+        columnNames:
+           - NULL  AS CRTE_GEST    #depends on site, null if != ind
+      POS_TIT_NOSTRO1:
+        tableName: CAI.ECR_ESP
+        key: NO_INTV ,NO_RUB ,NO_ISIN ,INDX_TIT ,DT_LIQ ,NO_DEP,
+        columnNames:
+           - NULL  AS CRTE_GEST    #depends on site, null if != ind
+      POS_TIT_NOSTRO2:
+        tableName: CAI.ECR_ESP
+        key: NO_INTV ,NO_RUB ,NO_ISIN ,INDX_TIT ,DT_LIQ ,NO_DEP,
+        columnNames:
+           - NULL  AS CRTE_GEST    #depends on site, null if != ind
+      CE1:
+        tableName: CAI.CE
+        key: NO_INTV ,NO_RUB ,NO_ISIN ,INDX_TIT ,DT_LIQ ,NO_DEP,
+        columnNames:
+           - NULL  AS CRTE_GEST    #depends on site, null if != ind
+      STAT_COMM:
+        columnNames:
+          - CONCAT(CONCAT(NDATA->O_OP, '.'), LPAD(DATA->NO_PH, 3, 0)) AS EVENT_NUMBER
+      CE2:
+        tableName: CAI.CE
+        key: NO_INTV ,NO_RUB ,NO_ISIN ,INDX_TIT ,DT_LIQ ,NO_DEP,
+        columnNames:
+           - NULL  AS CRTE_GEST    #depends on site, null if != ind
+    COM:
+      VALEUR:
+        key: DATA->CTRE_GEST ,DATA->NO_ISIN ,DATA->INDX_TIT ,
+        columnNames:
+          - CONCAT(CONCAT(TRIM(DATA->NO_ISIN), '.'), LPAD(DATA->INDX_TIT, 3, 0)) AS NO_ISIN_INDX_TIT 
+           
