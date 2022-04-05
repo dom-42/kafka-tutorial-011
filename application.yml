@@ -1,4 +1,6 @@
 # java -jar ksqldb-std-artifact-generator-1.0.1.jar --spring.config.location=anotherApplication.yml
+server:
+  port:  8099
 registry:
   maxInMemorySize: 5242880
 ksql:
@@ -22,12 +24,10 @@ model:
   createRawStreams: false
   dropStdStreams: false
   createStdStreams: false
-  #dropHistStreams: false
-  #createHistStreams: false
   dropConnectors: false
   createConnectors: true
   dropHistoryConnectors: false
-  createHistoryConnectors: false
+  createHistoryConnectors: true
   isSimulation: true
   topics: ^(COM|CAI|SGS)\..*$   #regexp filter,  ^.*$ if you don't want any filter'
   createKsqlTableFromStdStreamFor: ^(COM|CAI|SGS)\.(NOONE).*$  #reference tables like TGEN ones
@@ -45,7 +45,7 @@ model:
   STDStreamSkeleton: >
     CREATE STREAM %s_STD_S01  AS 
     SELECT 
-     ROWKEY,
+     %s
      %s%s%sHEADERS->OPERATION AS "operation",
      ROWTIME AS "eventTS",
      CASE
@@ -61,31 +61,17 @@ model:
   stdTableSkeleton: >
     CREATE TABLE %s_STD_T01 
     WITH (KAFKA_TOPIC='%s_STD_S01', FORMAT='AVRO' ); 
-  #histBranchDropStreamSkeleton: >
-  #  DROP STREAM %s_HIST_S02  DELETE TOPIC;
     
   DERIVEDStreamSkeleton: >
     CREATE STREAM %s_STD_S01  AS 
     SELECT 
-    ROWKEY,
+    %s
      %s%s%s"operation",
     "eventTS",
     "sourceTS",
     "sourceDate" 
     FROM %s_STD_S01
       %s   ;
-
-#  HISTStreamSkeleton: >
-#    CREATE STREAM %s_HIST_S02  AS 
-#    SELECT 
-#     %s%s%sLOCATION,
-#    "operation",
-#    "eventTS",
-#    "sourceTS",
-#    "sourceDate" 
-#    FROM %s_STD_S01
-#    PARTITION BY 
-#     %s, "sourceTS", "eventTS", "operation"   ;
 
         
   jdbcSinkConnectorSkeleton: >
@@ -129,7 +115,7 @@ model:
         "table.name.format" = 'SG_SGS_CPT.cpt.%s_HISTO',
         "auto.create"= true,
         "pk.mode"= 'record_value',
-        "pk.fields" = '%s, "sourceTS", "eventTS", "operation"',
+        "pk.fields" = '%s, sourceTS, eventTS, operation',
         "insert.mode"='insert',
         "errors.tolerance"= 'all',
         "errors.deadletterqueue.topic.name"='%s_HIST_DLQ01',
