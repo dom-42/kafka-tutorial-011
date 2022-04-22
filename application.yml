@@ -20,15 +20,18 @@ model:
   subjectDetailsUrl: http://localhost:8081/subjects/%s/versions/latest  # registrySchema
   
   ksqlUrl: http://localhost:8088
+  connectSTDlUrl: http://localhost:8083/connectors/sqlserver-%s_STD_S01-sink-connector-01/config
+  connectHISTlUrl: http://localhost:8083/connectors/sqlserver-%s_HIST_S01-sink-connector-01/config
+  
   dropRawStreams: false
   createRawStreams: false
   dropStdStreams: false
   createStdStreams: false
-  dropConnectors: false
-  createConnectors: true
-  dropHistoryConnectors: false
-  createHistoryConnectors: true
-  isSimulation: true
+  dropConnectors: true
+  createConnectors: false
+  dropHistoryConnectors: true
+  createHistoryConnectors: false
+  isSimulation: false
   topics: ^(COM|CAI|SGS)\..*$   #regexp filter,  ^.*$ if you don't want any filter'
   createKsqlTableFromStdStreamFor: ^(COM|CAI|SGS)\.(NOONE).*$  #reference tables like TGEN ones
   dontGenerateHistoryFor: ^(COM|CAI|SGS)\.(TGEN|HIST).*$  #some S2i tables are already historized and some don't need historization at all
@@ -37,8 +40,15 @@ model:
   rawDropStreamSkeleton: >
     DROP STREAM %s_RAW_S01;
   rawStreamSkeleton: >
-    CREATE STREAM %s_RAW_S01 
-    WITH (KAFKA_TOPIC='%s', FORMAT='AVRO' );    
+    CREATE STREAM %s_RAW_S01
+    WITH (FORMAT='AVRO',
+          KAFKA_TOPIC='%s',
+          PARTITIONS=1,
+          REPLICAS=1,
+          KEY_SCHEMA_ID=%s,
+          VALUE_SCHEMA_ID=%s); 
+    
+     
   stdDropStreamSkeleton: >
     DROP STREAM %s_STD_S01  DELETE TOPIC;    
     
@@ -74,60 +84,93 @@ model:
       %s   ;
 
         
+#  jdbcSinkConnectorSkeleton: >
+#   CREATE SINK CONNECTOR "sqlserver-%s_STD_S01-sink-connector-01" WITH(
+#        "connector.class"='io.confluent.connect.jdbc.JdbcSinkConnector',
+#        "connection.url"='jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++',
+#        "connection.user"='ct332',
+#        "connection.password"='Welcome2021++',
+#        "tasks.max"= 1,
+#        "batch.size" = 500,
+#        "consumer.override.max.poll.records" = 500,
+#        "auto.evolve"=true,
+#        "topics.regex"= '%s_STD_S01',
+#        "table.name.format" = 'SG_SGS_CPT.cpt.%s',
+#        "auto.create"= true,
+#        "pk.mode"= 'record_value',
+#        "pk.fields" = '%s',
+#        "insert.mode"='%s',  
+#        "errors.tolerance"= 'all',
+#        "errors.deadletterqueue.topic.name"='%s_STD_DLQ01',
+#        "errors.deadletterqueue.topic.replication.factor"= 1,
+#        "errors.deadletterqueue.context.headers.enable"=true,
+#        "errors.log.enable"=true,
+#        "errors.log.include.messages"=true,
+#        "value.converter"='io.confluent.connect.avro.AvroConverter',
+#        "value.converter.schema.registry.url"='http://schema-registry:8081',
+#        "key.converter"='io.confluent.connect.avro.AvroConverter',
+#        "key.converter.schema.registry.url"= 'http://schema-registry:8081'
+#        );
+
+# PUT: http://localhost:8083/connectors/sqlserver-%s_STD_S01-sink-connector-01/config
   jdbcSinkConnectorSkeleton: >
-   CREATE SINK CONNECTOR "sqlserver-%s_STD_S01-sink-connector-01" WITH(
-        "connector.class"='io.confluent.connect.jdbc.JdbcSinkConnector',
-        "connection.url"='jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++',
-        "connection.user"='ct332',
-        "connection.password"='Welcome2021++',
-        "tasks.max"= 1,
-        "batch.size" = 500,
-        "consumer.override.max.poll.records" = 500,
-        "auto.evolve"=true,
-        "topics.regex"= '%s_STD_S01',
-        "table.name.format" = 'SG_SGS_CPT.cpt.%s',
-        "auto.create"= true,
-        "pk.mode"= 'record_value',
-        "pk.fields" = '%s',
-        "insert.mode"='%s',  
-        "errors.tolerance"= 'all',
-        "errors.deadletterqueue.topic.name"='%s_STD_DLQ01',
-        "errors.deadletterqueue.topic.replication.factor"= 1,
-        "errors.deadletterqueue.context.headers.enable"=true,
-        "errors.log.enable"=true,
-        "errors.log.include.messages"=true,
-        "value.converter"='io.confluent.connect.avro.AvroConverter',
-        "value.converter.schema.registry.url"='http://schema-registry:8081',
-        "key.converter"='io.confluent.connect.avro.AvroConverter',
-        "key.converter.schema.registry.url"= 'http://schema-registry:8081'
-        );
+     {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "connection.url": "jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++",
+        "connection.user": "ct332",
+        "connection.password": "Welcome2021++",
+        "tasks.max": 1,
+        "batch.size" : 500,
+        "consumer.override.max.poll.records" : 500,
+        "auto.evolve": true,
+        "topics.regex": "%s_STD_S01",
+        "table.name.format": "SG_SGS_CPT.cpt.%s",
+        "auto.create": true,
+        "pk.mode": "record_value",
+        "pk.fields": "%s",
+        "insert.mode": "%s",  
+        "errors.tolerance": "all",
+        "errors.deadletterqueue.topic.name": "%s_STD_DLQ01",
+        "errors.deadletterqueue.topic.replication.factor": 1,
+        "errors.deadletterqueue.context.headers.enable": true,
+        "errors.log.enable": true,
+        "errors.log.include.messages": true,
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter.schema.registry.url": "http://schema-registry:8081",
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://schema-registry:8081"
+     }
+
+# PUT: http://localhost:8083/connectors/sqlserver-%s_HIST_S01-sink-connector-01s/config
   jdbcSinkConnectorForHistSkeleton: >
-   CREATE SINK CONNECTOR "sqlserver-%s_HIST_S01-sink-connector-01" WITH(
-        "connector.class"='io.confluent.connect.jdbc.JdbcSinkConnector',
-        "connection.url"='jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++',   
-        "connection.user"='ct332',
-        "connection.password"='Welcome2021++',
-        "tasks.max"= 1,
-        "batch.size" = 500,
-        "consumer.override.max.poll.records" = 500,
-        "auto.evolve"=true,
-        "topics.regex"= '%s_STD_S01',
-        "table.name.format" = 'SG_SGS_CPT.cpt.%s_HISTO',
-        "auto.create"= true,
-        "pk.mode"= 'record_value',
-        "pk.fields" = '%s, sourceTS, eventTS, operation',
-        "insert.mode"='insert',
-        "errors.tolerance"= 'all',
-        "errors.deadletterqueue.topic.name"='%s_HIST_DLQ01',
-        "errors.deadletterqueue.topic.replication.factor"= 1,
-        "errors.deadletterqueue.context.headers.enable"=true,
-        "errors.log.enable"=true,
-        "errors.log.include.messages"=true,
-        "value.converter"='io.confluent.connect.avro.AvroConverter',
-        "value.converter.schema.registry.url"='http://schema-registry:8081',
-        "key.converter"='io.confluent.connect.avro.AvroConverter',\n"
-        "key.converter.schema.registry.url"= 'http://schema-registry:8081'
-        );
+     {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "connection.url": "jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++",
+        "connection.user": "ct332",
+        "connection.password": "Welcome2021++",
+        "tasks.max": 1,
+        "batch.size" : 500,
+        "consumer.override.max.poll.records" : 500,
+        "auto.evolve": true,
+        "topics.regex": "%s_STD_S01",
+        "table.name.format": "SG_SGS_CPT.cpt.%s_HISTO",
+        "auto.create": true,
+        "pk.mode": "record_value",
+        "pk.fields": "%s, sourceTS, eventTS, operation",
+        "insert.mode": "insert",  
+        "errors.tolerance": "all",
+        "errors.deadletterqueue.topic.name": "%s_HIST_DLQ01",
+        "errors.deadletterqueue.topic.replication.factor": 1,
+        "errors.deadletterqueue.context.headers.enable": true,
+        "errors.log.enable": true,
+        "errors.log.include.messages": true,
+        "value.converter": "io.confluent.connect.avro.AvroConverter",
+        "value.converter.schema.registry.url": "http://schema-registry:8081",
+        "key.converter": "io.confluent.connect.avro.AvroConverter",
+        "key.converter.schema.registry.url": "http://schema-registry:8081"
+     }
+
+
   jdbcDropSinkConnectorSkeleton: >
    DROP CONNECTOR "sqlserver-%s_STD_S01-sink-connector-01";   
   jdbcDropSinkForHistConnectorSkeleton: >
