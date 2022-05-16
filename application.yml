@@ -1,107 +1,35 @@
-# java -jar ksqldb-std-artifact-generator-1.0.1.jar --spring.config.location=anotherApplication.yml
-server:
-  port:  8099
-registry:
-  maxInMemorySize: 5242880
-ksql:
-  maxInMemorySize: 5242880
-stdgen:
-  stdgenConfig: classpath:stdgenConfig.yml
-connect:
-  #connectionUrl: jdbc:sqlserver://SSUAVE1043.AD.CH.PBK:1112;databaseName=SG_SGS
-  #connectionUrl: jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++
-  #databaseAndSchema: SG_SGS_CPT.cpt
-  #connectionUser: ct332
-  #connectionPassword: Welcome2021++
-model:
-
-  allSchemasUrl: http://localhost:8081/schemas  # registrySchema[]
-  allSubjecstUrl: http://localhost:8081/subjects
-  subjectDetailsUrl: http://localhost:8081/subjects/%s/versions/latest  # registrySchema
-  
+# java -jar ksqldb-tgen-artifact-generator-1.0.0.jar --spring.config.location=anotherApplication.yml
+connect: 
   ksqlUrl: http://localhost:8088
-  connectSTDlUrl: http://localhost:8083/connectors/sqlserver-%s_STD_S01-sink-connector-01/config
-  connectHISTlUrl: http://localhost:8083/connectors/sqlserver-%s_HIST_S01-sink-connector-01/config
-  
-  dropRawStreams: false
-  createRawStreams: false
-  dropStdStreams: false
-  createStdStreams: false
-  dropConnectors: true
-  createConnectors: false
-  dropHistoryConnectors: true
-  createHistoryConnectors: false
-  isSimulation: false
-  topics: ^(COM|CAI|SGS)\..*$   #regexp filter,  ^.*$ if you don't want any filter'
-  createKsqlTableFromStdStreamFor: ^(COM|CAI|SGS)\.(NOONE).*$  #reference tables like TGEN ones
-  dontGenerateHistoryFor: ^(COM|CAI|SGS)\.(TGEN|HIST).*$  #some S2i tables are already historized and some don't need historization at all
-  specificInsertModeFor: ^(COM|CAI|SGS)\.(VALEUR|CE).*$ 
-  
-  rawDropStreamSkeleton: >
-    DROP STREAM %s_RAW_S01;
-  rawStreamSkeleton: >
-    CREATE STREAM %s_RAW_S01
-    WITH (FORMAT='AVRO',
-          KAFKA_TOPIC='%s',
-          PARTITIONS=1,
-          REPLICAS=1,
-          KEY_SCHEMA_ID=%s,
-          VALUE_SCHEMA_ID=%s); 
-    
-     
-  stdDropStreamSkeleton: >
-    DROP STREAM %s_STD_S01  DELETE TOPIC;    
-    
-  STDStreamSkeleton: >
-    CREATE STREAM %s_STD_S01  AS 
-    SELECT 
-     %s
-     %s%s%sHEADERS->OPERATION AS "operation",
-     ROWTIME AS "eventTS",
-     CASE
-       WHEN TRIM(HEADERS->CHANGESEQUENCE) = '' THEN ROWTIME
-       ELSE STRINGTOTIMESTAMP(SUBSTRING(HEADERS->CHANGESEQUENCE,1,14), 'yyyyMMddHHmmss')
-     END AS "sourceTS" 
-    FROM %s_RAW_S01
-     %s   ;
-    
-    
-  stdDropTableSkeleton: >
-    DROP TABLE %s_STD_T01; 
-  stdTableSkeleton: >
-    CREATE TABLE %s_STD_T01 
-    WITH (KAFKA_TOPIC='%s_STD_S01', FORMAT='AVRO' ); 
-    
-  DERIVEDStreamSkeleton: >
-    CREATE STREAM %s_STD_S01  AS 
-    SELECT 
-    %s
-     %s%s%s"operation",
-    "eventTS",
-    "sourceTS",
-    "sourceDate" 
-    FROM %s_STD_S01
-      %s   ;
+  connectSTDlUrl: http://localhost:8083/connectors/sqlserver-%s_BUS_S01-sink-connector-01/config
 
-        
+
+tgen:
+  tabgenConfig: classpath:tabgenConfig.yml
+  tabgenStream: SGS_TAB_GEN_STD_S01
+  createStreams: false
+  createConnectors: true
+  dropStreams: false
+  dropConnectors: false
+  isSimulation: true
+  codes: ALL  # comma separated list of codes to generate (taken from the tabgenConfig.yml file) or ALL 
+
 #  jdbcSinkConnectorSkeleton: >
-#   CREATE SINK CONNECTOR "sqlserver-%s_STD_S01-sink-connector-01" WITH(
+#    CREATE SINK CONNECTOR "sqlserver-%s_BUS_S01-sink-connector-01" WITH(
 #        "connector.class"='io.confluent.connect.jdbc.JdbcSinkConnector',
 #        "connection.url"='jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++',
 #        "connection.user"='ct332',
 #        "connection.password"='Welcome2021++',
 #        "tasks.max"= 1,
-#        "batch.size" = 500,
-#        "consumer.override.max.poll.records" = 500,
 #        "auto.evolve"=true,
-#        "topics.regex"= '%s_STD_S01',
+#        "topics.regex"= 'SGS_%s_BUS_S01',
 #        "table.name.format" = 'SG_SGS_CPT.cpt.%s',
 #        "auto.create"= true,
-#        "pk.mode"= 'record_value',
+#        "pk.mode"= 'record_key',
 #        "pk.fields" = '%s',
-#        "insert.mode"='%s',  
+#        "insert.mode"='upsert',
 #        "errors.tolerance"= 'all',
-#        "errors.deadletterqueue.topic.name"='%s_STD_DLQ01',
+#        "errors.deadletterqueue.topic.name"='SGS_%s_BUS_DLQ01',
 #        "errors.deadletterqueue.topic.replication.factor"= 1,
 #        "errors.deadletterqueue.context.headers.enable"=true,
 #        "errors.log.enable"=true,
@@ -112,25 +40,25 @@ model:
 #        "key.converter.schema.registry.url"= 'http://schema-registry:8081'
 #        );
 
+
 # PUT: http://localhost:8083/connectors/sqlserver-%s_STD_S01-sink-connector-01/config
   jdbcSinkConnectorSkeleton: >
      {
-        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-        "connection.url": "jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++",
-        "connection.user": "ct332",
-        "connection.password": "Welcome2021++",
+        "connector.class": "com.tutorial.connect.jdbc.JdbcSinkConnector",
+        "connection.url": "jdbc:sqlserver://host.docker.internal:1433;databaseName=kafka-tuto",
+        "connection.user": "sa",
+        "connection.password": "D@mWasHere01",
         "tasks.max": 1,
         "batch.size" : 500,
-        "consumer.override.max.poll.records" : 500,
         "auto.evolve": true,
-        "topics.regex": "%s_STD_S01",
-        "table.name.format": "SG_SGS_CPT.cpt.%s",
+        "topics.regex": "SGS_%s_BUS_S01",
+        "table.name.format": "kafka-tuto.dbo.%s",
         "auto.create": true,
         "pk.mode": "record_value",
         "pk.fields": "%s",
-        "insert.mode": "%s",  
+        "insert.mode": "event_driven",  
         "errors.tolerance": "all",
-        "errors.deadletterqueue.topic.name": "%s_STD_DLQ01",
+        "errors.deadletterqueue.topic.name": "SGS_%s_BUS_DLQ01",
         "errors.deadletterqueue.topic.replication.factor": 1,
         "errors.deadletterqueue.context.headers.enable": true,
         "errors.log.enable": true,
@@ -140,39 +68,23 @@ model:
         "key.converter": "io.confluent.connect.avro.AvroConverter",
         "key.converter.schema.registry.url": "http://schema-registry:8081"
      }
-
-# PUT: http://localhost:8083/connectors/sqlserver-%s_HIST_S01-sink-connector-01s/config
-  jdbcSinkConnectorForHistSkeleton: >
-     {
-        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
-        "connection.url": "jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++",
-        "connection.user": "ct332",
-        "connection.password": "Welcome2021++",
-        "tasks.max": 1,
-        "batch.size" : 500,
-        "consumer.override.max.poll.records" : 500,
-        "auto.evolve": true,
-        "topics.regex": "%s_STD_S01",
-        "table.name.format": "SG_SGS_CPT.cpt.%s_HISTO",
-        "auto.create": true,
-        "pk.mode": "record_value",
-        "pk.fields": "%s, sourceTS, eventTS, operation",
-        "insert.mode": "insert",  
-        "errors.tolerance": "all",
-        "errors.deadletterqueue.topic.name": "%s_HIST_DLQ01",
-        "errors.deadletterqueue.topic.replication.factor": 1,
-        "errors.deadletterqueue.context.headers.enable": true,
-        "errors.log.enable": true,
-        "errors.log.include.messages": true,
-        "value.converter": "io.confluent.connect.avro.AvroConverter",
-        "value.converter.schema.registry.url": "http://schema-registry:8081",
-        "key.converter": "io.confluent.connect.avro.AvroConverter",
-        "key.converter.schema.registry.url": "http://schema-registry:8081"
-     }
-
 
   jdbcDropSinkConnectorSkeleton: >
-   DROP CONNECTOR "sqlserver-%s_STD_S01-sink-connector-01";   
-  jdbcDropSinkForHistConnectorSkeleton: >
-   DROP CONNECTOR "sqlserver-%s_HIST_S01-sink-connector-01";     
-   
+    DROP CONNECTOR "sqlserver-%s_BUS_S01-sink-connector-01";
+  tgenDropStreamSkeleton: >
+    DROP STREAM SGS_%s_BUS_S01  DELETE TOPIC;
+    
+  tgenStreamSkeleton: >
+    CREATE STREAM SGS_%s_BUS_S01  AS 
+      SELECT  
+        %s
+        GTB_USER AS CD_USER_DER_CHG, 
+        PARSE_DATE(CAST(GTB_DTE_CHG AS VARCHAR), 'yyyyMMdd') DT_DER_CHG, 
+        "sourceTS",
+        "eventTS",
+        "operation",
+        "sourceDate"
+      FROM %s
+      WHERE GTB_TYP='%s'
+      PARTITION BY GTB_CDE;  
+    
