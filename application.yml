@@ -3,13 +3,12 @@ server:
   port:  8099
 
 model:
-  restProxyUrl: http://localhost:8082/v3/clusters/OL54Eo6DR6WhVRrUV7YN_w/topics%s
-  
+  restProxyUrl: http://rest-proxy:8082/v3/clusters/OL54Eo6DR6WhVRrUV7YN_w/consumer-groups
+  lag: 0
   isSimulation: false
-  topics: ^(COM|CAI|SGS)_T.*$   #regexp filter,  ^.*$ if you don't want any filter'
+  topics: ^(COM|CAI|SGS)_.*$   #regexp filter,  ^.*$ if you don't want any filter'
 
 # POST http://localhost:8082/v3/clusters/{cluster_id}/topics/{topic_name}/configs:alter => dynamic configuration to be applied (SET) or undone (DELETE)
-# retention.ms: 8640000000000 = 273 years 9 months, should be enough
   topicConfigsAlter: >
       {
         "data": [
@@ -18,8 +17,13 @@ model:
             "operation": "DELETE"
           },
           {
+            "name": "compression.type",
+            "value": "gzip",
+             "operation": "SET"
+          },
+          {
             "name": "retention.ms",
-            "value": "8640000000000",
+            "value": "3600000",
             "operation": "SET"
           }        ]
       }
