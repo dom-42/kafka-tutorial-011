@@ -1,90 +1,28 @@
-# java -jar ksqldb-tgen-artifact-generator-1.0.0.jar --spring.config.location=anotherApplication.yml
-connect: 
-  ksqlUrl: http://localhost:8088
-  connectSTDlUrl: http://localhost:8083/connectors/sqlserver-%s_BUS_S01-sink-connector-01/config
+# java -jar ksqldb-std-artifact-generator-1.0.1.jar --spring.config.location=anotherApplication.yml
+server:
+  port:  8099
 
+model:
+  restProxyUrl: http://localhost:8082/v3/clusters/OL54Eo6DR6WhVRrUV7YN_w/topics%s
+  
+  isSimulation: false
+  topics: ^(COM|CAI|SGS)_T.*$   #regexp filter,  ^.*$ if you don't want any filter'
 
-tgen:
-  tabgenConfig: classpath:tabgenConfig.yml
-  tabgenStream: SGS_TAB_GEN_STD_S01
-  createStreams: false
-  createConnectors: true
-  dropStreams: false
-  dropConnectors: false
-  isSimulation: true
-  codes: ALL  # comma separated list of codes to generate (taken from the tabgenConfig.yml file) or ALL 
+# POST http://localhost:8082/v3/clusters/{cluster_id}/topics/{topic_name}/configs:alter => dynamic configuration to be applied (SET) or undone (DELETE)
+# retention.ms: 8640000000000 = 273 years 9 months, should be enough
+  topicConfigsAlter: >
+      {
+        "data": [
+          {
+            "name": "cleanup.policy",
+            "operation": "DELETE"
+          },
+          {
+            "name": "retention.ms",
+            "value": "8640000000000",
+            "operation": "SET"
+          }        ]
+      }
 
-#  jdbcSinkConnectorSkeleton: >
-#    CREATE SINK CONNECTOR "sqlserver-%s_BUS_S01-sink-connector-01" WITH(
-#        "connector.class"='io.confluent.connect.jdbc.JdbcSinkConnector',
-#        "connection.url"='jdbc:sqlserver://ESUAVE1043.AD.CH.PBK:1111;databaseName=SG_SGS_CPT;authenticationScheme=NTLM;integratedSecurity=true;user=ct332;password=Welcome2021++',
-#        "connection.user"='ct332',
-#        "connection.password"='Welcome2021++',
-#        "tasks.max"= 1,
-#        "auto.evolve"=true,
-#        "topics.regex"= 'SGS_%s_BUS_S01',
-#        "table.name.format" = 'SG_SGS_CPT.cpt.%s',
-#        "auto.create"= true,
-#        "pk.mode"= 'record_key',
-#        "pk.fields" = '%s',
-#        "insert.mode"='upsert',
-#        "errors.tolerance"= 'all',
-#        "errors.deadletterqueue.topic.name"='SGS_%s_BUS_DLQ01',
-#        "errors.deadletterqueue.topic.replication.factor"= 1,
-#        "errors.deadletterqueue.context.headers.enable"=true,
-#        "errors.log.enable"=true,
-#        "errors.log.include.messages"=true,
-#        "value.converter"='io.confluent.connect.avro.AvroConverter',
-#        "value.converter.schema.registry.url"='http://schema-registry:8081',
-#        "key.converter"='io.confluent.connect.avro.AvroConverter',
-#        "key.converter.schema.registry.url"= 'http://schema-registry:8081'
-#        );
-
-
-# PUT: http://localhost:8083/connectors/sqlserver-%s_STD_S01-sink-connector-01/config
-  jdbcSinkConnectorSkeleton: >
-     {
-        "connector.class": "com.tutorial.connect.jdbc.JdbcSinkConnector",
-        "connection.url": "jdbc:sqlserver://host.docker.internal:1433;databaseName=kafka-tuto",
-        "connection.user": "sa",
-        "connection.password": "D@mWasHere01",
-        "tasks.max": 1,
-        "batch.size" : 500,
-        "auto.evolve": true,
-        "topics.regex": "SGS_%s_BUS_S01",
-        "table.name.format": "kafka-tuto.dbo.%s",
-        "auto.create": true,
-        "pk.mode": "record_value",
-        "pk.fields": "%s",
-        "insert.mode": "event_driven",  
-        "errors.tolerance": "all",
-        "errors.deadletterqueue.topic.name": "SGS_%s_BUS_DLQ01",
-        "errors.deadletterqueue.topic.replication.factor": 1,
-        "errors.deadletterqueue.context.headers.enable": true,
-        "errors.log.enable": true,
-        "errors.log.include.messages": true,
-        "value.converter": "io.confluent.connect.avro.AvroConverter",
-        "value.converter.schema.registry.url": "http://schema-registry:8081",
-        "key.converter": "io.confluent.connect.avro.AvroConverter",
-        "key.converter.schema.registry.url": "http://schema-registry:8081"
-     }
-
-  jdbcDropSinkConnectorSkeleton: >
-    DROP CONNECTOR "sqlserver-%s_BUS_S01-sink-connector-01";
-  tgenDropStreamSkeleton: >
-    DROP STREAM SGS_%s_BUS_S01  DELETE TOPIC;
-    
-  tgenStreamSkeleton: >
-    CREATE STREAM SGS_%s_BUS_S01  AS 
-      SELECT  
-        %s
-        GTB_USER AS CD_USER_DER_CHG, 
-        PARSE_DATE(CAST(GTB_DTE_CHG AS VARCHAR), 'yyyyMMdd') DT_DER_CHG, 
-        "sourceTS",
-        "eventTS",
-        "operation",
-        "sourceDate"
-      FROM %s
-      WHERE GTB_TYP='%s'
-      PARTITION BY GTB_CDE;  
-    
+   
+   
